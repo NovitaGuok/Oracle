@@ -1,0 +1,950 @@
+SQL> CREATE TABLE STUDIO (
+  2  NAME VARCHAR (60),
+  3  ADDRESS VARCHAR (60),
+  4  PRES VARCHAR (60)
+  5  );
+
+Table created.
+
+SQL> CREATE TABLE MOVIE (
+  2  TITLE VARCHAR (60) PRIMARY KEY,
+  3  YEAR INT,
+  4  LENGTH INT,
+  5  inCOLOR CHAR,
+  6  STUDIONAME VARCHAR (60)
+  7  );
+
+Table created.
+
+SQL> CREATE TABLE MOVIESTAR (
+  2  NAME VARCHAR2 (30),
+  3  BIRTHPLACE VARCHAR2 (50),
+  4  GENDER CHAR (1),
+  5  BIRTHDATE DATE,
+  6  PRIMARY KEY (NAME)
+  7  );
+
+Table created.
+
+SQL> CREATE TABLE STARSIN (
+  2  MOVIETITLE VARCHAR2 (50),
+  3  MOVIEYEAR NUMBER (4),
+  4  STARNAME VARCHAR2 (30),
+  5  PRIMARY KEY (MOVIETITLE, MOVIEYEAR, STARNAME),
+  6  FOREIGN KEY (STARNAME) REFERENCES MOVIESTAR(NAME)
+  7  ON DELETE CASCADE
+  8  );
+
+Table created.
+
+SQL> @D:\movie-database1.sql
+CREATE TABLE MovieStar
+             *
+ERROR at line 1:
+ORA-00955: name is already used by an existing object 
+
+
+CREATE TABLE StarsIn
+             *
+ERROR at line 1:
+ORA-00955: name is already used by an existing object 
+
+
+
+1 row created.
+
+
+1 row created.
+
+
+1 row created.
+
+
+1 row created.
+
+
+1 row created.
+
+
+1 row created.
+
+
+1 row created.
+
+
+1 row created.
+
+
+1 row created.
+
+
+1 row created.
+
+
+1 row created.
+
+
+1 row created.
+
+
+1 row created.
+
+
+1 row created.
+
+
+1 row created.
+
+
+1 row created.
+
+
+1 row created.
+
+
+1 row created.
+
+
+1 row created.
+
+
+1 row created.
+
+
+1 row created.
+
+
+1 row created.
+
+
+1 row created.
+
+
+1 row created.
+
+
+1 row created.
+
+
+1 row created.
+
+
+1 row created.
+
+
+1 row created.
+
+
+1 row created.
+
+
+1 row created.
+
+
+1 row created.
+
+
+1 row created.
+
+
+1 row created.
+
+
+1 row created.
+
+
+1 row created.
+
+
+1 row created.
+
+
+1 row created.
+
+
+1 row created.
+
+
+1 row created.
+
+
+1 row created.
+
+
+1 row created.
+
+
+1 row created.
+
+
+1 row created.
+
+
+1 row created.
+
+
+1 row created.
+
+
+1 row created.
+
+
+1 row created.
+
+
+1 row created.
+
+
+1 row created.
+
+
+1 row created.
+
+
+1 row created.
+
+
+1 row created.
+
+
+1 row created.
+
+
+1 row created.
+
+
+1 row created.
+
+
+1 row created.
+
+
+1 row created.
+
+
+1 row created.
+
+
+1 row created.
+
+
+1 row created.
+
+
+1 row created.
+
+
+1 row created.
+
+
+1 row created.
+
+
+1 row created.
+
+
+1 row created.
+
+
+1 row created.
+
+
+1 row created.
+
+
+1 row created.
+
+
+1 row created.
+
+
+1 row created.
+
+
+1 row created.
+
+
+1 row created.
+
+
+1 row created.
+
+
+1 row created.
+
+
+1 row created.
+
+
+1 row created.
+
+
+1 row created.
+
+
+1 row created.
+
+
+1 row created.
+
+
+1 row created.
+
+
+1 row created.
+
+
+1 row created.
+
+
+1 row created.
+
+
+1 row created.
+
+
+1 row created.
+
+
+1 row created.
+
+
+1 row created.
+
+
+1 row created.
+
+
+1 row created.
+
+
+1 row created.
+
+
+1 row created.
+
+
+1 row created.
+
+
+1 row created.
+
+
+1 row created.
+
+
+1 row created.
+
+
+1 row created.
+
+
+1 row created.
+
+
+1 row created.
+
+
+1 row created.
+
+
+1 row created.
+
+
+1 row created.
+
+
+1 row created.
+
+
+1 row created.
+
+
+1 row created.
+
+
+1 row created.
+
+
+1 row created.
+
+
+1 row created.
+
+
+1 row created.
+
+
+1 row created.
+
+
+1 row created.
+
+
+1 row created.
+
+
+1 row created.
+
+
+1 row created.
+
+
+1 row created.
+
+
+1 row created.
+
+
+1 row created.
+
+
+1 row created.
+
+
+1 row created.
+
+
+1 row created.
+
+
+1 row created.
+
+
+1 row created.
+
+
+1 row created.
+
+
+1 row created.
+
+
+1 row created.
+
+
+1 row created.
+
+
+1 row created.
+
+SQL> INSERT INTO STUDIO (NAME, ADDRESS, PRES) VALUES ('Paramount Pictures', 'Hollywood, California, USA', 'Brad Grey');
+
+1 row created.
+
+SQL> INSERT INTO STUDIO (NAME, ADDRESS, PRES) VALUES ('Universal Pictures', 'Universal City, California, USA', 'Ronald Meyer');
+
+1 row created.
+
+SQL> INSERT INTO MOVIE (TITLE, YEAR, LENGTH, inCOLOR, STUDIONAME) VALUES ('Daddy''s Home', '2015', '200', 'Y', 'Paramount Pictures');
+
+1 row created.
+
+SQL> INSERT INTO MOVIE (TITLE, YEAR, LENGTH, inCOLOR, STUDIONAME) VALUES ('Teenage Mutant Ninja Turtles: Out of Shadows', '2016', '250', 'Y', 'Paramount Pictures');
+
+1 row created.
+
+SQL> INSERT INTO MOVIE (TITLE, YEAR, LENGTH, inCOLOR, STUDIONAME) VALUES ('Minion', '2015', '160', 'Y', 'Universal Pictures');
+
+1 row created.
+
+SQL> INSERT INTO MOVIE (TITLE, YEAR, LENGTH, inCOLOR, STUDIONAME) VALUES ('Jumanji: Welcome to the Jungle', '2018', '120', 'Y', 'Interscope Pictures');
+
+1 row created.
+
+SQL> INSERT INTO MOVIE (TITLE, YEAR, LENGTH, inCOLOR, STUDIONAME) VALUES ('Insidious the Last Key', '2018', '180', 'N', 'Blumhouse Productions');
+
+1 row created.
+
+SQL> INSERT INTO MOVIE (TITLE, YEAR, LENGTH, inCOLOR, STUDIONAME) VALUES ('Once Upon Time in Venice', '2018', '230', 'Y', 'Voltages Pictures');
+
+1 row created.
+
+SQL> ALTER TABLE STUDIO ADD CONSTRAINT NameIsKey PRIMARY KEY (NAME);
+
+Table altered.
+
+SQL> ALTER TABLE MOVIESTAR ADD CONSTRAINT Uniquebirthday UNIQUE (BIRTHPLACE, BIRTHDATE);
+
+Table altered.
+
+SQL> ALTER TABLE MOVIE ADD FOREIGN KEY (STUDIONAME) REFERENCES STUDIO (NAME);
+ALTER TABLE MOVIE ADD FOREIGN KEY (STUDIONAME) REFERENCES STUDIO (NAME)
+*
+ERROR at line 1:
+ORA-02298: cannot validate (M2NOVITA.SYS_C004108) - parent keys not found 
+
+SQL> ALTER TABLE MOVIE ADD FOREIGN KEY (STUDIONAME);
+ALTER TABLE MOVIE ADD FOREIGN KEY (STUDIONAME)
+                                             *
+ERROR at line 1:
+ORA-00905: missing keyword 
+
+
+SQL> SELECT * FROM STUDIO;
+
+NAME                                                                            
+------------------------------------------------------------                    
+ADDRESS                                                                         
+------------------------------------------------------------                    
+PRES                                                                            
+------------------------------------------------------------                    
+Castle Rock Entertainment                                                       
+Burbank, California, USA                                                        
+Alan F. Horn                                                                    
+                                                                                
+Warner Bros. Pictures                                                           
+Burbank, California, USA                                                        
+Alan F. Horn                                                                    
+
+NAME                                                                            
+------------------------------------------------------------                    
+ADDRESS                                                                         
+------------------------------------------------------------                    
+PRES                                                                            
+------------------------------------------------------------                    
+                                                                                
+Arturo Gonzales Producciones                                                    
+Spain                                                                           
+Alfredo Fraile                                                                  
+                                                                                
+Miramax Films                                                                   
+Cambridge, Massachusetts, USA                                                   
+
+NAME                                                                            
+------------------------------------------------------------                    
+ADDRESS                                                                         
+------------------------------------------------------------                    
+PRES                                                                            
+------------------------------------------------------------                    
+Bob Weinstein                                                                   
+                                                                                
+New Line Cinema                                                                 
+Robertson Blvd, Los Angeles, California, USA                                    
+Toby Emmerich                                                                   
+                                                                                
+Focus Features                                                                  
+
+NAME                                                                            
+------------------------------------------------------------                    
+ADDRESS                                                                         
+------------------------------------------------------------                    
+PRES                                                                            
+------------------------------------------------------------                    
+Oxford House, London, United Kingdom                                            
+Ronald Meyer                                                                    
+                                                                                
+Paramount Pictures                                                              
+Hollywood, California, USA                                                      
+Brad Grey                                                                       
+                                                                                
+
+NAME                                                                            
+------------------------------------------------------------                    
+ADDRESS                                                                         
+------------------------------------------------------------                    
+PRES                                                                            
+------------------------------------------------------------                    
+Universal Pictures                                                              
+Universal City, California, USA                                                 
+Ronald Meyer                                                                    
+                                                                                
+
+8 rows selected.
+
+SQL> ALTER TABLE MOVIE ADD FOREIGN KEY (STUDIONAME) REFERENCES STUDIO (NAME);
+ALTER TABLE MOVIE ADD FOREIGN KEY (STUDIONAME) REFERENCES STUDIO (NAME)
+*
+ERROR at line 1:
+ORA-02298: cannot validate (M2NOVITA.SYS_C004109) - parent keys not found 
+
+
+SQL> ALTER TABLE MOVIE ADD FOREIGN KEY (STUDIONAME) REFERENCES STUDIO (NAME)
+  2  	ON DELETE CASCADE
+  3  );
+)
+*
+ERROR at line 3:
+ORA-01735: invalid ALTER TABLE option 
+
+
+SQL> ALTER TABLE MOVIE ADD FOREIGN KEY (STUDIONAME) REFERENCES STUDIO (NAME)
+  2  	ON DELETE CASCADE
+  3  ;
+ALTER TABLE MOVIE ADD FOREIGN KEY (STUDIONAME) REFERENCES STUDIO (NAME)
+*
+ERROR at line 1:
+ORA-02298: cannot validate (M2NOVITA.SYS_C004110) - parent keys not found 
+
+
+SQL> ALTER TABLE MOVIE ADD CONSTRAINT StudioProduction FOREIGN KEY (STUDIONAME) REFERENCES STUDIO (NAME)
+  2  	ON DELETE CASCADE
+  3  ;
+ALTER TABLE MOVIE ADD CONSTRAINT StudioProduction FOREIGN KEY (STUDIONAME) REFERENCES STUDIO (NAME)
+                                 *
+ERROR at line 1:
+ORA-02298: cannot validate (M2NOVITA.STUDIOPRODUCTION) - parent keys not found 
+
+
+SQL> ALTER TABLE MOVIE ADD PRIMARY KEY (STUDIONAME);
+ALTER TABLE MOVIE ADD PRIMARY KEY (STUDIONAME)
+                      *
+ERROR at line 1:
+ORA-02260: table can have only one primary key 
+
+
+SQL> DROP TABLE MOVIE;
+
+Table dropped.
+
+SQL> CREATE TABLE MOVIE (
+  2  TITLE VARCHAR (60) PRIMARY KEY,
+  3  YEAR INT,
+  4  LENGTH INT,
+  5  inCOLOR CHAR,
+  6  STUDIONAME VARCHAR (60) PRIMARY KEY
+  7  );
+STUDIONAME VARCHAR (60) PRIMARY KEY
+                        *
+ERROR at line 6:
+ORA-02260: table can have only one primary key 
+
+
+SQL> CREATE TABLE MOVIE (
+  2  TITLE VARCHAR (60),
+  3  YEAR INT,
+  4  LENGTH INT,
+  5  inCOLOR CHAR,
+  6  STUDIONAME VARCHAR (60),
+  7  PRIMARY KEY (TITLE, STUDIONAME)
+  8  );
+
+Table created.
+
+SQL> ALTER TABLE MOVIE ADD FOREIGN KEY (STUDIONAME) REFERENCES STUDIO (NAME)
+  2  	ON DELETE CASCADE
+  3  ;
+
+Table altered.
+
+SQL> INSERT INTO STUDIO (NAME, ADDRESS, PRES) VALUES ('Paramount Pictures', 'Hollywood, California, USA', 'Brad Grey');
+INSERT INTO STUDIO (NAME, ADDRESS, PRES) VALUES ('Paramount Pictures', 'Hollywood, California, USA', 'Brad Grey')
+*
+ERROR at line 1:
+ORA-00001: unique constraint (M2NOVITA.NAMEISKEY) violated 
+
+
+SQL> INSERT INTO STUDIO (NAME, ADDRESS, PRES) VALUES ('Universal Pictures', 'Universal City, California, USA', 'Ronald Meyer');
+INSERT INTO STUDIO (NAME, ADDRESS, PRES) VALUES ('Universal Pictures', 'Universal City, California, USA', 'Ronald Meyer')
+*
+ERROR at line 1:
+ORA-00001: unique constraint (M2NOVITA.NAMEISKEY) violated 
+
+
+SQL> INSERT INTO MOVIE (TITLE, YEAR, LENGTH, inCOLOR, STUDIONAME) VALUES ('Daddy''s Home', '2015', '200', 'Y', 'Paramount Pictures');
+
+1 row created.
+
+SQL> INSERT INTO MOVIE (TITLE, YEAR, LENGTH, inCOLOR, STUDIONAME) VALUES ('Teenage Mutant Ninja Turtles: Out of Shadows', '2016', '250', 'Y', 'Paramount Pictures');
+
+1 row created.
+
+SQL> INSERT INTO MOVIE (TITLE, YEAR, LENGTH, inCOLOR, STUDIONAME) VALUES ('Minion', '2015', '160', 'Y', 'Universal Pictures');
+
+1 row created.
+
+SQL> INSERT INTO MOVIE (TITLE, YEAR, LENGTH, inCOLOR, STUDIONAME) VALUES ('Jumanji: Welcome to the Jungle', '2018', '120', 'Y', 'Interscope Pictures');
+INSERT INTO MOVIE (TITLE, YEAR, LENGTH, inCOLOR, STUDIONAME) VALUES ('Jumanji: Welcome to the Jungle', '2018', '120', 'Y', 'Interscope Pictures')
+*
+ERROR at line 1:
+ORA-02291: integrity constraint (M2NOVITA.SYS_C004113) violated - parent key 
+not found 
+
+
+SQL> INSERT INTO MOVIE (TITLE, YEAR, LENGTH, inCOLOR, STUDIONAME) VALUES ('Insidious the Last Key', '2018', '180', 'N', 'Blumhouse Productions');
+INSERT INTO MOVIE (TITLE, YEAR, LENGTH, inCOLOR, STUDIONAME) VALUES ('Insidious the Last Key', '2018', '180', 'N', 'Blumhouse Productions')
+*
+ERROR at line 1:
+ORA-02291: integrity constraint (M2NOVITA.SYS_C004113) violated - parent key 
+not found 
+
+
+SQL> INSERT INTO MOVIE (TITLE, YEAR, LENGTH, inCOLOR, STUDIONAME) VALUES ('Once Upon Time in Venice', '2018', '230', 'Y', 'Voltages Pictures');
+INSERT INTO MOVIE (TITLE, YEAR, LENGTH, inCOLOR, STUDIONAME) VALUES ('Once Upon Time in Venice', '2018', '230', 'Y', 'Voltages Pictures')
+*
+ERROR at line 1:
+ORA-02291: integrity constraint (M2NOVITA.SYS_C004113) violated - parent key 
+not found 
+
+
+SQL> ALTER TABLE MOVIE DROP FOREIGN KEY (STUDIONAME);
+ALTER TABLE MOVIE DROP FOREIGN KEY (STUDIONAME)
+                       *
+ERROR at line 1:
+ORA-00905: missing keyword 
+
+
+SQL> ALTER TABLE MOVIE DROP FOREIGN KEY (STUDIONAME) REFERENCES STUDIO (NAME);
+ALTER TABLE MOVIE DROP FOREIGN KEY (STUDIONAME) REFERENCES STUDIO (NAME)
+                       *
+ERROR at line 1:
+ORA-00905: missing keyword 
+
+
+SQL> DROP TABLE MOVIE;
+
+Table dropped.
+
+SQL> CREATE TABLE MOVIE (
+  2  TITLE VARCHAR (60),
+  3  YEAR INT,
+  4  LENGTH INT,
+  5  inCOLOR CHAR,
+  6  STUDIONAME VARCHAR (60).
+  7  PRIMARY KEY (TITLE, STUDIONAME)
+  8  );
+STUDIONAME VARCHAR (60).
+                       *
+ERROR at line 6:
+ORA-00907: missing right parenthesis 
+
+
+SQL> CREATE TABLE MOVIE (
+  2  TITLE VARCHAR (60),
+  3  YEAR INT,
+  4  LENGTH INT,
+  5  inCOLOR CHAR,
+  6  STUDIONAME VARCHAR (60),
+  7  PRIMARY KEY (TITLE, STUDIONAME)
+  8  );
+
+Table created.
+
+SQL> INSERT INTO STUDIO (NAME, ADDRESS, PRES) VALUES ('Paramount Pictures', 'Hollywood, California, USA', 'Brad Grey');
+INSERT INTO STUDIO (NAME, ADDRESS, PRES) VALUES ('Paramount Pictures', 'Hollywood, California, USA', 'Brad Grey')
+*
+ERROR at line 1:
+ORA-00001: unique constraint (M2NOVITA.NAMEISKEY) violated 
+
+
+SQL> INSERT INTO STUDIO (NAME, ADDRESS, PRES) VALUES ('Universal Pictures', 'Universal City, California, USA', 'Ronald Meyer');
+INSERT INTO STUDIO (NAME, ADDRESS, PRES) VALUES ('Universal Pictures', 'Universal City, California, USA', 'Ronald Meyer')
+*
+ERROR at line 1:
+ORA-00001: unique constraint (M2NOVITA.NAMEISKEY) violated 
+
+
+SQL> INSERT INTO MOVIE (TITLE, YEAR, LENGTH, inCOLOR, STUDIONAME) VALUES ('Daddy''s Home', '2015', '200', 'Y', 'Paramount Pictures');
+
+1 row created.
+
+SQL> INSERT INTO MOVIE (TITLE, YEAR, LENGTH, inCOLOR, STUDIONAME) VALUES ('Teenage Mutant Ninja Turtles: Out of Shadows', '2016', '250', 'Y', 'Paramount Pictures');
+
+1 row created.
+
+SQL> INSERT INTO MOVIE (TITLE, YEAR, LENGTH, inCOLOR, STUDIONAME) VALUES ('Minion', '2015', '160', 'Y', 'Universal Pictures');
+
+1 row created.
+
+SQL> INSERT INTO MOVIE (TITLE, YEAR, LENGTH, inCOLOR, STUDIONAME) VALUES ('Jumanji: Welcome to the Jungle', '2018', '120', 'Y', 'Interscope Pictures');
+
+1 row created.
+
+SQL> INSERT INTO MOVIE (TITLE, YEAR, LENGTH, inCOLOR, STUDIONAME) VALUES ('Insidious the Last Key', '2018', '180', 'N', 'Blumhouse Productions');
+
+1 row created.
+
+SQL> INSERT INTO MOVIE (TITLE, YEAR, LENGTH, inCOLOR, STUDIONAME) VALUES ('Once Upon Time in Venice', '2018', '230', 'Y', 'Voltages Pictures');
+
+1 row created.
+
+SQL> ALTER TABLE MOVIE ADD FOREIGN KEY (STUDIONAME) REFERENCES STUDIO (NAME);
+ALTER TABLE MOVIE ADD FOREIGN KEY (STUDIONAME) REFERENCES STUDIO (NAME)
+*
+ERROR at line 1:
+ORA-02298: cannot validate (M2NOVITA.SYS_C004115) - parent keys not found 
+
+
+SQL> ALTER TABLE MOVIE ADD FOREIGN KEY (STUDIONAME) REFERENCES STUDIO (NAME)
+  2  	ON DELETE CASCADE;
+ALTER TABLE MOVIE ADD FOREIGN KEY (STUDIONAME) REFERENCES STUDIO (NAME)
+*
+ERROR at line 1:
+ORA-02298: cannot validate (M2NOVITA.SYS_C004116) - parent keys not found 
+
+
+SQL> DROP TABLE MOVIE;
+
+Table dropped.
+
+SQL> CREATE TABLE MOVIE (
+  2  TITLE VARCHAR (60),
+  3  YEAR INT,
+  4  LENGTH INT,
+  5  inCOLOR CHAR,
+  6  STUDIONAME VARCHAR (60),
+  7  PRIMARY KEY (TITLE, STUDIONAME)
+  8  );
+
+Table created.
+
+SQL> ALTER TABLE MOVIE ADD FOREIGN KEY (STUDIONAME) REFERENCES STUDIO (NAME)
+  2  	ON DELETE CASCADE
+  3  ;
+
+Table altered.
+
+SQL> INSERT INTO MOVIE (TITLE, YEAR, LENGTH, inCOLOR, STUDIONAME) VALUES ('Daddy''s Home', '2015', '200', 'Y', 'Paramount Pictures');
+
+1 row created.
+
+SQL> INSERT INTO MOVIE (TITLE, YEAR, LENGTH, inCOLOR, STUDIONAME) VALUES ('Teenage Mutant Ninja Turtles: Out of Shadows', '2016', '250', 'Y', 'Paramount Pictures');
+
+1 row created.
+
+SQL> INSERT INTO MOVIE (TITLE, YEAR, LENGTH, inCOLOR, STUDIONAME) VALUES ('Minion', '2015', '160', 'Y', 'Universal Pictures');
+
+1 row created.
+
+SQL> INSERT INTO MOVIE (TITLE, YEAR, LENGTH, inCOLOR, STUDIONAME) VALUES ('Jumanji: Welcome to the Jungle', '2018', '120', 'Y', 'Interscope Pictures');
+INSERT INTO MOVIE (TITLE, YEAR, LENGTH, inCOLOR, STUDIONAME) VALUES ('Jumanji: Welcome to the Jungle', '2018', '120', 'Y', 'Interscope Pictures')
+*
+ERROR at line 1:
+ORA-02291: integrity constraint (M2NOVITA.SYS_C004118) violated - parent key 
+not found 
+
+
+SQL> INSERT INTO MOVIE (TITLE, YEAR, LENGTH, inCOLOR, STUDIONAME) VALUES ('Insidious the Last Key', '2018', '180', 'N', 'Blumhouse Productions');
+INSERT INTO MOVIE (TITLE, YEAR, LENGTH, inCOLOR, STUDIONAME) VALUES ('Insidious the Last Key', '2018', '180', 'N', 'Blumhouse Productions')
+*
+ERROR at line 1:
+ORA-02291: integrity constraint (M2NOVITA.SYS_C004118) violated - parent key 
+not found 
+
+
+SQL> INSERT INTO MOVIE (TITLE, YEAR, LENGTH, inCOLOR, STUDIONAME) VALUES ('Once Upon Time in Venice', '2018', '230', 'Y', 'Voltages Pictures');
+INSERT INTO MOVIE (TITLE, YEAR, LENGTH, inCOLOR, STUDIONAME) VALUES ('Once Upon Time in Venice', '2018', '230', 'Y', 'Voltages Pictures')
+*
+ERROR at line 1:
+ORA-02291: integrity constraint (M2NOVITA.SYS_C004118) violated - parent key 
+not found 
+
+
+SQL> INSERT INTO STARSIN (STARNAME, MOVIETITLE, MOVIEYEAR) VALUES ('Julia Roberts', 'Inception', '2010');
+INSERT INTO STARSIN (STARNAME, MOVIETITLE, MOVIEYEAR) VALUES ('Julia Roberts', 'Inception', '2010')
+*
+ERROR at line 1:
+ORA-02291: integrity constraint (M2NOVITA.SYS_C004105) violated - parent key 
+not found 
+
+
+SQL> INSERT INTO STARSIN (STARNAME, MOVIETITLE, MOVIEYEAR) VALUES ('Josh Brolin', 'Milk', '2008');
+
+1 row created.
+
+SQL> INSERT INTO STARSIN (STARNAME, MOVIETITLE, MOVIEYEAR) VALUES ('Tim Robbins', 'Finding Nemo', '2007');
+
+1 row created.
+
+SQL> SELECT STARNAME FROM STARSIN WHERE MOVIETITLE = 'The Green Mile';
+
+STARNAME                                                                        
+------------------------------                                                  
+Tom Hanks                                                                       
+Michael Clark Duncan                                                            
+Bonnie Hunt                                                                     
+James Cromwell                                                                  
+
+SQL> ALTER TABLE STARSIN ADD FOREIGN KEY (STARNAME) REFERENCES TO MOVIESTAR (NAME)
+  2  	ON DELETE SET NULL;
+ALTER TABLE STARSIN ADD FOREIGN KEY (STARNAME) REFERENCES TO MOVIESTAR (NAME)
+                                                          *
+ERROR at line 1:
+ORA-00903: invalid table name 
+
+
+SQL> ALTER TABLE STARSIN ADD FOREIGN KEY (STARNAME) REFERENCES MOVIESTAR (NAME)
+  2  	ON DELETE SET NULL;
+ALTER TABLE STARSIN ADD FOREIGN KEY (STARNAME) REFERENCES MOVIESTAR (NAME)
+                        *
+ERROR at line 1:
+ORA-02275: such a referential constraint already exists in the table 
+
+
+SQL> DELETE FROM STARSIN WHERE TITLE = 'The Green Mile';
+DELETE FROM STARSIN WHERE TITLE = 'The Green Mile'
+                          *
+ERROR at line 1:
+ORA-00904: "TITLE": invalid identifier 
+
+
+SQL> DELETE FROM STARSIN WHERE MOVIETITLE = 'The Green Mile';
+
+4 rows deleted.
+
+SQL> SELECT MOVIETITLE FROM STARSIN WHERE STARNAME = 'Emile Hirsch';
+
+MOVIETITLE                                                                      
+--------------------------------------------------                              
+Milk                                                                            
+
+SQL> DELETE FROM STARSIN WHERE STARNAME = 'Emile Hirsch';
+
+1 row deleted.
+
+SQL> SELECT TITLE FROM MOVIE WHERE STUDIONAME = 'Paramount Pictures';
+
+TITLE                                                                           
+------------------------------------------------------------                    
+Daddy's Home                                                                    
+Teenage Mutant Ninja Turtles: Out of Shadows                                    
+
+SQL> DELETE FROM MOVIE WHERE STUDIONAME = 'Paramount Pictures';
+
+2 rows deleted.
+
+SQL> ALTER TABLE MOVIE ADD CONSTRAINT RightYear CHECK (YEAR > 1895);
+
+Table altered. 
+
+SQL> ALTER TABLE MOVIE DROP CONSTRAINT RightYear;
+
+Table altered.
+
+SQL> ALTER TABLE MOVIE ADD CONSTRAINT RightYear CHECK (YEAR >= 1895);
+
+Table altered.
+
+SQL> ALTER TABLE MOVIE ADD CONSTRAINT RightLength CHECK (LENGTH >= 60 OR LENGTH <= 250);
+
+Table altered.
+
+SQL> ALTER TABLE MOVIESTAR ADD CONSTRAINT NoAndro CHECK (GENDER = 'F' OR GENDER = 'M');
+
+Table altered.
+
+SQL> ALTER TABLE STUDIO ADD CONSTRAINT NoPres CHECK (PRES IS NOT NULL);
+
+Table altered.
+
+SQL> ALTER TABLE MOVIESTAR ADD CONSTRAINT RightTitle CHECK (GENDER = 'F' OR NAME NOT LIKE 'Ms.%');
+
+Table altered.
+
+SQL> ALTER TABLE STARSIN ADD CONSTRAINT NoNewBorn CHECK (STARNAME = 'Kevin Bacon' AND MOVIEYEAR >= 1958);
+
+Table altered.
+
+SQL> ALTER TABLE MOVIE ADD CONSTRAINT SpecialMovie CHECK (YEAR > 1990 AND inCOLOR = 'Y');
+
+Table altered.
+
+SQL> ALTER TABLE MOVIE ADD CONSTRAINT RightColor CHECK (inCOLOR = 'N' AND YEAR <= 1939);
+
+Table altered.
+
+SQL> ALTER TABLE MOVIE ADD CONSTRAINT ExistingStudio CHECK (STUDIONAME IS NOT NULL);
+
+Table altered.
+
+SQL> SPOOL OFF;

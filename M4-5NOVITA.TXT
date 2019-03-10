@@ -1,0 +1,589 @@
+SQL> @D:\proc1.sql
+ 10  .
+SQL> run
+  1  CREATE OR REPLACE PROCEDURE AddNewStar (
+  2      p_Name IN MovieStar.name%TYPE,
+  3      p_BirthPlace IN MovieStar.birthPlace%TYPE,
+  4      p_Gender IN MovieStar.gender%TYPE,
+  5      p_BirthDate IN MovieStar.birthDate%TYPE) AS
+  6  BEGIN
+  7      INSERT INTO MovieStar (name,birthPlace,gender,birthDate)
+  8          VALUES (p_Name,p_BirthPlace,p_Gender,p_BirthDate);
+  9* END AddNewStar;
+
+Procedure created.
+
+SQL> INSERT INTO MOVIESTAR (NAME, BIRTHPLACE, BIRTHDATE) VALUES ('Tim Roth', 'London, England', '14-May-1961');
+
+1 row created.
+
+SQL> INSERT INTO MOVIESTAR (NAME, BIRTHPLACE, BIRTHDATE) VALUES ('Ken Watanabe', 'Uonuma, Japan', '21-Oct-1959');
+
+1 row created.
+
+SQL> INSERT INTO MOVIESTAR (NAME, BIRTHPLACE, BIRTHDATE) VALUES ('Emma Watson', 'Paris, France', '15-Apr-1990');
+
+1 row created.
+
+SQL> @D:\proc1.1sql
+ 10  .
+SQL> run
+  1  CREATE OR REPLACE PROCEDURE AddNewStar (
+  2      p_Name IN MovieStar.name%TYPE) AS
+  3  BEGIN
+  4      INSERT INTO MOVIESTAR (NAME) VALUES (p_Name);
+  5  
+  6  EXCEPTION
+  7      WHEN DUP_VAL_ON_INDEX THEN
+  8          DBMS_OUTPUT.PUT_LINE ('Duplicate value in MOVIESTAR name.');
+  9* END AddNewStar;
+
+Procedure created.
+
+SQL> CALL ADDNEWSTAR ('Tim Roth');
+Duplicate value in MOVIESTAR name.                                              
+
+Call completed.  
+
+SQL> @D:\proc1.2.sql
+ 13  .
+SQL> run
+  1  CREATE OR REPLACE PROCEDURE NoNewBorn (
+  2      p_Name IN Moviestar.Name%TYPE,
+  3      p_BirthDate IN MovieStar.birthDate%TYPE) AS
+  4      NO_NEW_BORN EXCEPTION;
+  5  BEGIN
+  6      IF p_BirthDate > SYSDATE THEN
+  7          RAISE NO_NEW_BORN;
+  8      END IF;
+  9  EXCEPTION
+ 10      WHEN NO_NEW_BORN THEN
+ 11          DBMS_OUTPUT.PUT_LINE ('Birthdate can not be later than today.');
+ 12* END NoNewBorn;
+
+Procedure created.
+
+SQL> call nonewborn ('Novita', '07-Nov-2018');
+Birthdate can not be later than today.                                          
+
+Call completed.
+
+SQL> @D:\proc1.3.sql
+ 20  .
+SQL> run
+  1  CREATE OR REPLACE PROCEDURE NoGender (
+  2      p_Name IN MovieStar.Name%TYPE,
+  3      p_Gender IN MovieStar.gender%TYPE) AS
+  4      NO_GENDER EXCEPTION;
+  5  BEGIN
+  6      IF p_Gender = 'M' THEN
+  7          INSERT INTO MOVIESTAR (NAME, GENDER) VALUES (p_Name, p_Gender);
+  8      ELSIF
+  9          p_Gender = 'F' THEN
+ 10           INSERT INTO MOVIESTAR (NAME, GENDER) VALUES (p_Name, p_Gender);
+ 11      ELSE
+ 12          RAISE NO_GENDER;
+ 13      END IF;
+ 14  EXCEPTION
+ 15      WHEN NO_GENDER THEN
+ 16          DBMS_OUTPUT.PUT_LINE ('Gender must be M or F.');
+ 17  END NoGender;
+ 18  
+ 19* 
+
+Procedure created.
+
+SQL> call nogender ('Novita', 'G');
+Gender must be M or F.                                                          
+
+Call completed.
+
+SQL> call nogender ('Novita', 'F');
+
+Call completed.
+
+SQL> @D:\proc1.4.sql
+ 30  .
+SQL> run
+  1  CREATE OR REPLACE PROCEDURE Others (
+  2      p_Name IN MovieStar.name%TYPE,
+  3      p_Gender IN MovieStar.gender%TYPE,
+  4      p_BirthDate IN MovieStar.birthDate%TYPE) AS
+  5      NO_NEW_BORN EXCEPTION;
+  6      NO_GENDER EXCEPTION;
+  7      OTHERS EXCEPTION;
+  8  
+  9  BEGIN
+ 10      IF p_BirthDate > SYSDATE THEN
+ 11          RAISE NO_NEW_BORN;
+ 12      ELSIF p_Gender NOT IN ('M', 'F') THEN
+ 13          RAISE NO_GENDER;
+ 14      ELSE
+ 15          INSERT INTO MOVIESTAR (NAME, GENDER, BIRTHDATE) VALUES (p_Name, p_Gender, p_BirthDate);
+ 16      END IF;
+ 17  
+ 18  EXCEPTION
+ 19      WHEN DUP_VAL_ON_INDEX THEN
+ 20          DBMS_OUTPUT.PUT_LINE ('Duplicate value in MovieStar name.');
+ 21      WHEN NO_NEW_BORN THEN
+ 22          DBMS_OUTPUT.PUT_LINE ('Birthdate can not be later than today.');
+ 23      WHEN NO_GENDER THEN
+ 24          DBMS_OUTPUT.PUT_LINE ('Gender must be M or F.');
+ 25      WHEN OTHERS THEN
+ 26          DBMS_OUTPUT.PUT_LINE ('An error is occurred.');
+ 27  END Others;
+ 28  
+ 29* 
+
+Procedure created.
+
+SQL> call others ('Novita', 'M', '07-Nov-2000');
+
+Call completed.
+
+SQL> call others ('Novita', 'F', '07-Nov-2000');
+Duplicate value in MovieStar name.                                              
+
+Call completed.
+
+SQL> delete from moviestar where name = 'Novita';
+
+1 row deleted.
+
+SQL> call others ('Novita', 'F', '07-Nov-2000');
+
+Call completed.
+
+SQL> call others ('Novita', 'G', '07-Nov-2000');
+Gender must be M or F.                                                          
+
+Call completed.
+
+SQL> call others ('Novita', 'G', '07-Nov-2018');
+Birthdate can not be later than today.                                          
+
+Call completed.
+
+SQL> delete from moviestar where name = 'Novita';
+
+1 row deleted.
+
+SQL> call others ('', 'F', '07-Nov-2000');
+An error is occurred.                                                           
+
+Call completed.
+
+SQL> @D:\proc2.sql
+ 21  .
+SQL> RUN
+  1  CREATE OR REPLACE PROCEDURE WhoAreYou (
+  2      p_Name IN MOVIESTAR.Name%TYPE) AS
+  3      M_S EXCEPTION;
+  4      N_MS EXCEPTION;
+  5      STAR NUMBER := 0;
+  6  
+  7  BEGIN
+  8      SELECT COUNT(NAME) INTO STAR FROM MOVIESTAR WHERE MOVIESTAR.NAME = p_Name;
+  9      IF STAR > 0 THEN
+ 10          RAISE M_S;
+ 11      ELSE
+ 12          RAISE N_MS;
+ 13      END IF;
+ 14  
+ 15  EXCEPTION
+ 16      WHEN M_S THEN
+ 17          DBMS_OUTPUT.PUT_LINE (p_Name || ' is a moviestar.');
+ 18      WHEN N_MS THEN
+ 19          DBMS_OUTPUT.PUT_LINE (p_Name || ' is not a moviestar.');
+ 20* END WhoAreYou;
+
+Procedure created.
+
+SQL> call whoareyou ('Novita');
+Novita is not a moviestar.                                                      
+
+Call completed.
+
+SQL> call whoareyou ('Tim Roth');
+Tim Roth is a moviestar.                                                        
+
+Call completed.
+
+SQL> @D:\proc3.sql
+ 20  .
+SQL> RUN
+  1  CREATE OR REPLACE PROCEDURE WhoAreYou2 (
+  2      p_Name IN MOVIESTAR.Name%TYPE) AS
+  3      M_S EXCEPTION;
+  4      STAR VARCHAR(30);
+  5      SN NUMBER := 0;
+  6  BEGIN
+  7      SELECT NAME INTO STAR FROM MOVIESTAR WHERE p_Name = MOVIESTAR.NAME;
+  8      SELECT COUNT (NAME) INTO SN FROM MOVIESTAR WHERE p_Name = MOVIESTAR.NAME;
+  9      IF SN > 0 THEN
+ 10          RAISE M_S;
+ 11      END IF;
+ 12  EXCEPTION
+ 13      WHEN M_S THEN
+ 14          DBMS_OUTPUT.PUT_LINE (p_Name || ' is a moviestar.');
+ 15      WHEN NO_DATA_FOUND THEN
+ 16          DBMS_OUTPUT.PUT_LINE (p_Name || ' is not a moviestar.');
+ 17      WHEN OTHERS THEN
+ 18          DBMS_OUTPUT.PUT_LINE ('An error is occured.');
+ 19* END WhoAreYou2;
+
+Procedure created.
+
+SQL> call whoareyou2 ('Novita');
+Novita is not a moviestar.                                                      
+
+Call completed.
+
+SQL> call whoareyou2 ('Tim Roth');
+Tim Roth is a moviestar.                                                        
+
+Call completed.
+
+SQL> @D:\func1.sql
+ 33  .
+SQL> run
+  1  CREATE OR REPLACE FUNCTION NotProductive (
+  2      p_Name IN STARSIN.StarName%TYPE,
+  3      p_Year IN STARSIN.MovieYear%TYPE) RETURN VARCHAR2 AS
+  4      n_NAME NUMBER := 0;
+  5      n_YEAR VARCHAR2(30);
+  6      NOT_PRODUCTIVE EXCEPTION;
+  7      TOO_MUCH EXCEPTION;
+  8  
+  9  BEGIN
+ 10      SELECT COUNT(STARNAME) INTO n_Name FROM STARSIN WHERE STARSIN.StarName = p_Name AND STARSIN.MovieYear = p_Year;
+ 11          IF n_Name = 1 THEN
+ 12              n_Year := 'Productive Year.';
+ 13              RETURN (n_YEAR);
+ 14          ELSIF n_NAME = 2 THEN
+ 15              n_Year := 'Very Productive Year.';
+ 16              RETURN (n_YEAR);
+ 17          ELSIF n_NAME = 0 THEN
+ 18              RAISE NOT_PRODUCTIVE;
+ 19          ELSE
+ 20              RAISE TOO_MUCH;
+ 21          END IF;
+ 22  EXCEPTION
+ 23      WHEN NOT_PRODUCTIVE THEN
+ 24          DBMS_OUTPUT.PUT_LINE ('This movie star is not productive.');
+ 25          RETURN(n_YEAR);
+ 26      WHEN TOO_MUCH THEN
+ 27          DBMS_OUTPUT.PUT_LINE ('The number of movies is too high.');
+ 28          RETURN(n_YEAR);
+ 29      WHEN OTHERS THEN
+ 30          DBMS_OUTPUT.PUT_LINE ('An error is occured.');
+ 31          RETURN(n_YEAR);
+ 32* END NotProductive;
+
+Function created.
+
+SQL> BEGIN
+  2  DBMS_OUTPUT.PUT_LINE (NotProductive ('Novita', '2000'));
+  3  END;
+  4  /
+This movie star is not productive.                                              
+
+PL/SQL procedure successfully completed.
+
+SQL> INSERT INTO STARSIN (STARNAME, MOVIEYEAR, MOVIETITLE) VALUES ('Novita', '2000', 'Bla');
+
+1 row created.
+
+SQL> INSERT INTO STARSIN (STARNAME, MOVIEYEAR, MOVIETITLE) VALUES ('Novita', '2000', 'Lol');
+
+1 row created.
+
+SQL> BEGIN
+  2  DBMS_OUTPUT.PUT_LINE (NotProductive ('Novita', '2000'));
+  3  END;
+  4  /
+Very Productive Year.                                                           
+
+PL/SQL procedure successfully completed.
+
+SQL> INSERT INTO STARSIN (STARNAME, MOVIEYEAR, MOVIETITLE) VALUES ('Novita', '2000', 'Haha');
+
+1 row created.
+
+SQL> BEGIN
+  2  DBMS_OUTPUT.PUT_LINE (NotProductive ('Novita', '2000'));
+  3  END;
+  4  /
+The number of movies is too high.                                               
+
+PL/SQL procedure successfully completed.
+
+SQL> BEGIN
+  2  DBMS_OUTPUT.PUT_LINE (NotProductive ('Novita', '2000'));
+  3  END;
+  4  /
+The number of movies is too high.                                               
+
+PL/SQL procedure successfully completed.
+
+SQL> @D:\proc4.sql
+ 17  .
+SQL> run
+  1  CREATE OR REPLACE PROCEDURE NoNewBorn2 (
+  2      p_Name IN Moviestar.Name%TYPE,
+  3      p_BirthDate IN MovieStar.birthDate%TYPE) AS
+  4      NO_NEW_BORN EXCEPTION;
+  5  BEGIN
+  6      IF p_BirthDate > SYSDATE THEN
+  7          RAISE NO_NEW_BORN;
+  8      ELSE
+  9          INSERT INTO MOVIESTAR (NAME, BIRTHDATE) VALUES (p_Name, p_BirthDate);
+ 10      END IF;
+ 11  EXCEPTION
+ 12      WHEN NO_NEW_BORN THEN
+ 13          DBMS_OUTPUT.PUT_LINE ('Birthdate can not be later than today.');
+ 14  END NoNewBorn2;
+ 15  
+ 16* 
+
+Procedure created.
+
+SQL> call nonewborn2 ('Novita', '07-Nov-2018');
+Birthdate can not be later than today.                                          
+
+Call completed.
+
+SQL> call nonewborn2 ('Novita', '07-Nov-2017');
+
+Call completed.
+
+SQL> select * from moviestar where name = 'Novita';
+
+NAME                                                                            
+------------------------------                                                  
+BIRTHPLACE                                         G BIRTHDATE                  
+-------------------------------------------------- - ---------                  
+Novita                                                                          
+                                                     07-NOV-17          
+
+        
+SQL> @D:\proc5.sql
+  7  .
+SQL> run
+  1  CREATE OR REPLACE PROCEDURE NoMoreStars (
+  2      p_Name IN MOVIESTAR.Name%TYPE) AS
+  3  BEGIN
+  4      DELETE FROM MOVIESTAR WHERE MOVIESTAR.Name = p_Name;
+  5      DELETE FROM STARSIN WHERE STARSIN.StarName = p_Name;
+  6* END NoMoreStars;
+
+Procedure created.
+
+SQL> select * from moviestar where name = 'Novita';
+
+NAME                                                                            
+------------------------------                                                  
+BIRTHPLACE                                         G BIRTHDATE                  
+-------------------------------------------------- - ---------                  
+Novita                                                                          
+                                                   F 07-NOV-00                  
+                                                                                
+
+SQL> select * from starsin where starname = 'Novita';
+
+MOVIETITLE                                          MOVIEYEAR                   
+-------------------------------------------------- ----------                   
+STARNAME                                                                        
+------------------------------                                                  
+Bla                                                      2000                   
+Novita                                                                          
+                                                                                
+Haha                                                     2000                   
+Novita                                                                          
+                                                                                
+Lol                                                      2000                   
+Novita                                                                          
+                                                                                
+
+SQL> call nomorestars ('Novita');
+
+Call completed.
+
+SQL> select * from moviestar where name = 'Novita';
+
+no rows selected
+
+SQL> select * from starsin where starname = 'Novita';
+
+no rows selected
+
+SQL> @D:\func2.sql
+  9  .
+SQL> run
+  1  CREATE OR REPLACE FUNCTION After50s (
+  2      p_Title IN Movie.title%TYPE) RETURN Movie.year%TYPE AS
+  3      v_Year Movie.year%TYPE;
+  4  BEGIN
+  5      SELECT year INTO v_Year FROM Movie
+  6          WHERE title = p_Title;
+  7      RETURN v_Year;
+  8* END After50s;
+
+Function created.
+
+SQL> BEGIN
+  2  DBMS_OUTPUT.PUT_LINE (After50s('Pulp Fiction'));
+  3  END;
+  4  /
+1994                                                                            
+
+PL/SQL procedure successfully completed.
+
+SQL> BEGIN
+  2  DBMS_OUTPUT.PUT_LINE (After50s('Casablanca'));
+  3  END;
+  4  /
+1942                                                                            
+
+PL/SQL procedure successfully completed.
+
+SQL> BEGIN
+  2  DBMS_OUTPUT.PUT_LINE (After50s('Milk'));
+  3  END;
+  4  /
+2008                                                                            
+
+PL/SQL procedure successfully completed.
+
+SQL> @D:\func2.sql
+  9  .
+SQL> run
+  1  CREATE OR REPLACE FUNCTION After50s (
+  2      p_Name IN STARSIN.StarName%TYPE,
+  3      p_Year IN STARSIN.MovieYear%TYPE) RETURN NUMBER AS
+  4      v_Star NUMBER := 0;
+  5  BEGIN
+  6      SELECT COUNT(STARNAME) INTO v_Star FROM STARSIN WHERE STARSIN.StarName = p_Name AND STARSIN.MovieYear = p_Year;
+  7      RETURN (v_Star);
+  8* END After50s;
+
+Function created.
+
+SQL> INSERT INTO STARSIN (STARNAME, MOVIEYEAR, MOVIETITLE) VALUES ('Novita', '2000', 'Bla');
+
+1 row created.
+
+SQL> INSERT INTO STARSIN (STARNAME, MOVIEYEAR, MOVIETITLE) VALUES ('Novita', '2000', 'Lol');
+
+1 row created.
+
+SQL> INSERT INTO STARSIN (STARNAME, MOVIEYEAR, MOVIETITLE) VALUES ('Novita', '2000', 'Haha');
+
+1 row created.
+
+SQL> BEGIN
+  2  DBMS_OUTPUT.PUT_LINE (After50s('Novita', '2000'));
+  3  END;
+  4  /
+3                                                                               
+
+PL/SQL procedure successfully completed.
+
+SQL> BEGIN
+  2  DBMS_OUTPUT.PUT_LINE (After50s('Tim Roth', '1994'));
+  3  END;
+  4  /
+1                                                                               
+
+PL/SQL procedure successfully completed.
+
+SQL> INSERT INTO STARSIN (STARNAME, MOVIEYEAR, MOVIETITLE) VALUES ('Novita', '2000', 'Loud');
+
+SQL> @D:\func2.sql
+ 25  .
+SQL> run
+  1  CREATE OR REPLACE FUNCTION After50s (
+  2      p_Name IN STARSIN.StarName%TYPE,
+  3      p_Year IN STARSIN.MovieYear%TYPE) RETURN VARCHAR2 AS
+  4      v_Star NUMBER := 0;
+  5      v_Cap VARCHAR2(30);
+  6  BEGIN
+  7      SELECT COUNT(STARNAME) INTO v_Star FROM STARSIN WHERE STARSIN.StarName = p_Name AND STARSIN.MovieYear = p_Year;
+  8      IF v_Star = 0 THEN
+  9          v_Cap := 'Not productive.';
+ 10          RETURN (v_Cap);
+ 11      ELSIF v_Star = 1 THEN
+ 12          v_Cap := 'Productive year.';
+ 13          RETURN (v_Cap);
+ 14      ELSIF v_Star = 2 THEN
+ 15          v_Cap := 'Very productive year.';
+ 16          RETURN (v_Cap);
+ 17      ELSIF v_Star = 3 THEN
+ 18          v_Cap := 'Too productive.';
+ 19          RETURN (v_Cap);
+ 20      ELSIF v_Star > 3 THEN
+ 21          v_Cap := 'Too much, please.';
+ 22          RETURN (v_Cap);
+ 23      END IF;
+ 24* END After50s;
+
+Function created.
+
+SQL> BEGIN
+  2  DBMS_OUTPUT.PUT_LINE (After50s('Novita', '2000'));
+  3  END;
+  4  /
+Too much, please.                                                               
+
+PL/SQL procedure successfully completed.
+
+SQL> delete from starsin where movietitle = 'Loud';
+
+1 row deleted.
+
+SQL> BEGIN
+  2  DBMS_OUTPUT.PUT_LINE (After50s('Novita', '2000'));
+  3  END;
+  4  /
+Too productive.                                                                 
+
+PL/SQL procedure successfully completed.
+
+SQL> delete from starsin where movietitle = 'Haha';
+
+1 row deleted.
+
+SQL> BEGIN
+  2  DBMS_OUTPUT.PUT_LINE (After50s('Novita', '2000'));
+  3  END;
+  4  /
+Very productive year.                                                           
+
+PL/SQL procedure successfully completed.
+
+SQL> delete from starsin where movietitle = 'Lol';
+
+1 row deleted.
+
+SQL> BEGIN
+  2  DBMS_OUTPUT.PUT_LINE (After50s('Novita', '2000'));
+  3  END;
+  4  /
+Productive year.                                                                
+
+PL/SQL procedure successfully completed.
+
+SQL> delete from starsin where movietitle = 'Bla';
+
+1 row deleted.
+
+SQL> BEGIN
+  2  DBMS_OUTPUT.PUT_LINE (After50s('Novita', '2000'));
+  3  END;
+  4  /
+Not productive.                                                                 
+
+PL/SQL procedure successfully completed.
+
+SQL> spool off;
+

@@ -1,0 +1,21 @@
+SET SERVEROUTPUT ON
+CREATE OR REPLACE PROCEDURE WhoAreYou (
+    p_Name IN MOVIESTAR.Name%TYPE) AS
+    M_S EXCEPTION;
+    N_MS EXCEPTION;
+    STAR NUMBER := 0;
+
+BEGIN  
+    SELECT COUNT(NAME) INTO STAR FROM MOVIESTAR WHERE MOVIESTAR.NAME = p_Name;
+    IF STAR > 0 THEN
+        RAISE M_S;
+    ELSE
+        RAISE N_MS;
+    END IF;
+
+EXCEPTION
+    WHEN M_S THEN
+        DBMS_OUTPUT.PUT_LINE (p_Name || ' is a moviestar.');
+    WHEN N_MS THEN
+        DBMS_OUTPUT.PUT_LINE (p_Name || ' is not a moviestar.');
+END WhoAreYou;

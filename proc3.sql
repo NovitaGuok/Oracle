@@ -1,0 +1,20 @@
+SET SERVEROUTPUT ON
+CREATE OR REPLACE PROCEDURE WhoAreYou2 (
+    p_Name IN MOVIESTAR.Name%TYPE) AS
+    M_S EXCEPTION;
+    STAR VARCHAR2(30);
+    SN NUMBER := 0;
+BEGIN  
+    SELECT NAME INTO STAR FROM MOVIESTAR WHERE p_Name = MOVIESTAR.NAME;
+    CASE 
+        WHEN STAR = p_Name THEN
+        RAISE M_S;
+    END CASE;
+EXCEPTION
+    WHEN M_S THEN
+        DBMS_OUTPUT.PUT_LINE (p_Name || ' is a moviestar.');
+    WHEN NO_DATA_FOUND THEN
+        DBMS_OUTPUT.PUT_LINE (p_Name || ' is not a moviestar.');
+    WHEN OTHERS THEN
+        DBMS_OUTPUT.PUT_LINE ('An error is occured.');
+END WhoAreYou2;

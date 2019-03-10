@@ -1,0 +1,14 @@
+SET SERVEROUTPUT ON 
+CREATE TRIGGER NoNewBorn
+    AFTER INSERT ON STARSIN
+    FOR EACH ROW
+    DECLARE 
+        s_born NUMBER := 0;
+        s_m NUMBER := 0;
+    BEGIN 
+        SELECT EXTRACT (YEAR FROM DATE) FROM BIRTHDATE INTO s_born FROM MOVIESTAR;
+        SELECT MOVIEYEAR INTO s_m FROM STARSIN;
+        IF s_born > s_m then
+            RAISE_APPLICATION_ERROR(-12321, 'Haven''t born yet!'); 
+    END IF;
+END NoNewBorn;

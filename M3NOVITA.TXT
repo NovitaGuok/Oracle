@@ -1,0 +1,324 @@
+SQL> CREATE TABLE Studio
+  2  ( name VARCHAR2(30),
+  3    address VARCHAR2(50),
+  4    pres VARCHAR2(30),
+  5    PRIMARY KEY (name)
+  6  );
+
+Table created.
+
+SQL> 
+SQL> CREATE TABLE Movie
+  2  ( title VARCHAR2(50),
+  3    year NUMBER(4),
+  4    length NUMBER(3),
+  5    inColor CHAR(1),
+  6    studioName VARCHAR2(30),
+  7    PRIMARY KEY (title, year)
+  8  );
+
+Table created.
+
+SQL> 
+SQL> CREATE TABLE MovieStar
+  2  ( name VARCHAR2(30),
+  3    birthplace VARCHAR2(50),
+  4    gender CHAR(1),
+  5    birthdate DATE,
+  6    PRIMARY KEY (name)
+  7  );
+
+Table created.
+
+SQL> 
+SQL> CREATE TABLE StarsIn
+  2  ( movieTitle VARCHAR2(50),
+  3    movieYear NUMBER(4),
+  4    starName VARCHAR(30),
+  5    PRIMARY KEY (movieTitle, movieYear, starName)
+  6  );
+
+Table created.
+
+SQL> @D:\starcheck.sql
+  9  .
+SQL> RUN
+  1  CREATE TRIGGER StarCheck
+  2  	BEFORE INSERT ON StarsIn
+  3  	REFERENCING NEW AS newRow
+  4  	FOR EACH ROW
+  5  	BEGIN
+  6  		INSERT INTO MovieStar(name) VALUES (:newRow.StarName);
+  7  		DBMS_OUTPUT.PUT_LINE('New Star '||:newRow.StarName||'!!');
+  8* 	END StarCheck;
+
+Trigger created.
+
+SQL> INSERT INTO STARSIN (STARNAME, MOVIETITLE, MOVIEYEAR) VALUES ('Leonardo DiCaprio', 'Inception', '2010');
+New Star Leonardo DiCaprio!!                                                    
+
+1 row created.
+
+SQL> INSERT INTO STARSIN (STARNAME, MOVIETITLE, MOVIEYEAR) VALUES ('Al Pacino', 'The Godfather', '1972');
+New Star Al Pacino!!                                                            
+
+1 row created.
+
+SQL> drop trigger starcheck;
+
+Trigger dropped.
+
+SQL> @D:\moviecheck.sql;
+ 10  .
+SQL> run
+  1  CREATE TRIGGER MovieCheck
+  2  	BEFORE INSERT ON StarsIn
+  3  	REFERENCING NEW AS newRow
+  4  	FOR EACH ROW
+  5  	BEGIN
+  6  		INSERT INTO MovieStar(name) VALUES (:newRow.StarName);
+  7          INSERT INTO Movie(title, year, studioname) VALUES  (:newRow.MovieTitle, :newRow.MovieYear, :newRow.MovieTitle);
+  8  		DBMS_OUTPUT.PUT_LINE('New Star '||:newRow.StarName|| ' in ' ||:newRow.MovieTitle|| ' movie on ' ||:newRow.MovieYear||'!!');
+  9* 	END MovieCheck;
+
+Trigger created.
+
+SQL> INSERT INTO STARSIN (STARNAME, MOVIETITLE, MOVIEYEAR) VALUES ('Joseph Gordon-Levitt', 'Inception', '2010');
+New Star Joseph Gordon-Levitt in Inception movie on 2010!!                      
+
+1 row created.
+
+SQL> INSERT INTO STARSIN (STARNAME, MOVIETITLE, MOVIEYEAR) VALUES ('Marlon Brando', 'The Godfather', '1972');
+New Star Marlon Brando in The Godfather movie on 1972!!                         
+
+1 row created.
+
+SQL> INSERT INTO STARSIN (STARNAME, MOVIETITLE, MOVIEYEAR) VALUES ('Sean Penn', 'Milk', '2008');
+New Star Sean Penn in Milk movie on 2008!!                                      
+
+1 row created.
+
+SQL> @D:\bustedmovie.sql
+  8  .
+SQL> run
+  1  CREATE TRIGGER bustedmovie
+  2  	BEFORE DELETE ON Movie
+  3  	REFERENCING OLD AS oldRow
+  4  	FOR EACH ROW
+  5  	BEGIN
+  6  		DELETE FROM STARSIN WHERE STARSIN.MOVIETITLE = :oldRow.Title;
+  7* END bustedmovie;
+
+Trigger created.
+
+SQL> select * from starsin;
+
+MOVIETITLE                                          MOVIEYEAR                   
+-------------------------------------------------- ----------                   
+STARNAME                                                                        
+------------------------------                                                  
+Inception                                                2010                   
+Joseph Gordon-Levitt                                                            
+                                                                                
+The Godfather                                            1972                   
+Marlon Brando                                                                   
+                                                                                
+Milk                                                     2008                   
+Sean Penn                                                                       
+                                                                                
+
+SQL> select * from movie;
+
+TITLE                                                    YEAR     LENGTH I      
+-------------------------------------------------- ---------- ---------- -      
+STUDIONAME                                                                      
+------------------------------                                                  
+Inception                                                2010                   
+Inception                                                                       
+                                                                                
+The Godfather                                            1972                   
+The Godfather                                                                   
+                                                                                
+Milk                                                     2008                   
+Milk                                                                            
+                                                                                
+
+SQL> DELETE FROM MOVIE WHERE TITLE = 'The Godfather';
+
+1 row deleted.
+
+SQL> select * from starsin;
+
+MOVIETITLE                                          MOVIEYEAR                   
+-------------------------------------------------- ----------                   
+STARNAME                                                                        
+------------------------------                                                  
+Inception                                                2010                   
+Joseph Gordon-Levitt                                                            
+                                                                                
+Milk                                                     2008                   
+Sean Penn                                                                       
+                                                                                
+SQL> @D:\studioproduct.sql
+  9  .
+SQL> run
+  1  CREATE TRIGGER StudioProduct
+  2      AFTER INSERT ON Movie
+  3      DECLARE
+  4          m_length NUMBER := 0;
+  5      BEGIN
+  6          SELECT SUM(length) INTO m_length FROM Movie;
+  7          DBMS_OUTPUT.PUT_LINE('We have '|| m_length ||' minutes of movies!!');
+  8* END StudioProduct;
+
+Trigger created.
+
+SQL> @D:\toomuch.sql;
+ 11  .
+SQL> RUN
+  1  CREATE TRIGGER TooMuch
+  2      AFTER INSERT ON Movie
+  3      DECLARE
+  4          m_length NUMBER := 0;
+  5      BEGIN
+  6          SELECT SUM(length) INTO m_length FROM Movie;
+  7          IF m_length > 10000 then
+  8              DBMS_OUTPUT.PUT_LINE('The minutes is exceeded');
+  9          END IF;
+ 10* END TooMuch;
+
+Trigger created.
+
+SQL> select * from movie;
+
+TITLE                                                    YEAR     LENGTH I      
+-------------------------------------------------- ---------- ---------- -      
+STUDIONAME                                                                      
+------------------------------                                                  
+Inception                                                2010                   
+Inception                                                                       
+                                                                                
+Milk                                                     2008                   
+Milk                                                                            
+                                                                                
+
+SQL> UPDATE MOVIE SET LENGTH = 148 WHERE TITLE = 'Inception';
+
+1 row updated.
+
+SQL> UPDATE MOVIE SET LENGTH = 128 WHERE TITLE = 'Milk';
+
+1 row updated.
+
+SQL> select * from movie;
+
+TITLE                                                    YEAR     LENGTH I      
+-------------------------------------------------- ---------- ---------- -      
+STUDIONAME                                                                      
+------------------------------                                                  
+Inception                                                2010        148        
+Inception                                                                       
+                                                                                
+Milk                                                     2008        128        
+Milk                                                                            
+                                                                                
+
+SQL> INSERT INTO MOVIE (TITLE, LENGTH) VALUES ('Blabla', 9729);
+INSERT INTO MOVIE (TITLE, LENGTH) VALUES ('Blabla', 9729)
+                                                    *
+ERROR at line 1:
+ORA-01438: value larger than specified precision allowed for this column 
+
+
+SQL> INSERT INTO MOVIE (TITLE, LENGTH) VALUES ('Blabla', 999);
+INSERT INTO MOVIE (TITLE, LENGTH) VALUES ('Blabla', 999)
+*
+ERROR at line 1:
+ORA-01400: cannot insert NULL into ("M3NOVITA"."MOVIE"."YEAR") 
+
+
+SQL> INSERT INTO MOVIE (TITLE, YEAR, LENGTH) VALUES ('Blabla', 1666, 999);
+We have 1275 minutes of movies!!                                                
+
+1 row created.
+
+SQL> INSERT INTO MOVIE (TITLE, YEAR, LENGTH) VALUES ('Wow', 1666, 999);
+We have 2274 minutes of movies!!                                                
+
+1 row created.
+
+SQL> INSERT INTO MOVIE (TITLE, YEAR, LENGTH) VALUES ('wo', 1666, 999);
+We have 3273 minutes of movies!!                                                
+
+1 row created.
+
+SQL> INSERT INTO MOVIE (TITLE, YEAR, LENGTH) VALUES ('w', 1666, 999);
+We have 4272 minutes of movies!!                                                
+
+1 row created.
+
+SQL> INSERT INTO MOVIE (TITLE, YEAR, LENGTH) VALUES ('hahahahhahahahaha', 1666, 999);
+We have 5271 minutes of movies!!                                                
+
+1 row created.
+
+SQL> INSERT INTO MOVIE (TITLE, YEAR, LENGTH) VALUES ('hahahahhahahahah', 1666, 999);
+We have 6270 minutes of movies!!                                                
+
+1 row created.
+
+SQL> INSERT INTO MOVIE (TITLE, YEAR, LENGTH) VALUES ('hahahahhahahaha', 1666, 999);
+We have 7269 minutes of movies!!                                                
+
+1 row created.
+
+SQL> INSERT INTO MOVIE (TITLE, YEAR, LENGTH) VALUES ('hahahahhhahaha', 1666, 999);
+We have 8268 minutes of movies!!                                                
+
+1 row created.
+
+SQL> INSERT INTO MOVIE (TITLE, YEAR, LENGTH) VALUES ('hahahahhahaha', 1666, 999);
+We have 9267 minutes of movies!!                                                
+
+1 row created.
+
+SQL> INSERT INTO MOVIE (TITLE, YEAR, LENGTH) VALUES ('hahahhahaha', 1666, 999);
+The minutes is exceeded                                                         
+We have 10266 minutes of movies!!                                               
+
+1 row created.
+
+SQL> drop trigger toomuch;
+
+Trigger dropped.
+
+SQL> DELETE FROM MOVIE WHERE TITLE = 'hahahhahaha';
+
+1 row deleted.
+
+SQL> @D:\toomuch.sql;
+ 11  .
+SQL> run
+  1  CREATE TRIGGER TooMuch
+  2      AFTER INSERT ON Movie
+  3      DECLARE
+  4          m_length NUMBER := 0;
+  5      BEGIN
+  6          SELECT SUM(length) INTO m_length FROM Movie;
+  7          IF m_length > 10000 then
+  8              RAISE_APPLICATION_ERROR(-10000, 'The minutes is exceeded!!!');
+  9          END IF;
+ 10* END TooMuch;
+
+Trigger created.
+
+SQL> INSERT INTO MOVIE (TITLE, YEAR, LENGTH) VALUES ('hahahhahaha', 1666, 999);
+INSERT INTO MOVIE (TITLE, YEAR, LENGTH) VALUES ('hahahhahaha', 1666, 999)
+            *
+ERROR at line 1:
+ORA-21000: error number argument to raise_application_error of -10000 is out of 
+range 
+ORA-06512: at "M3NOVITA.TOOMUCH", line 6 
+ORA-04088: error during execution of trigger 'M3NOVITA.TOOMUCH' 
+
+SQL> spool off;

@@ -1,0 +1,556 @@
+SQL> @D:\movie-database-4.sql
+
+Table created.
+
+
+Table created.
+
+
+Table created.
+
+
+Table created.
+
+
+1 row created.
+
+
+1 row created.
+
+
+1 row created.
+
+
+1 row created.
+
+
+1 row created.
+
+
+1 row created.
+
+
+1 row created.
+
+
+1 row created.
+
+
+1 row created.
+
+
+1 row created.
+
+
+1 row created.
+
+
+1 row created.
+
+
+1 row created.
+
+
+1 row created.
+
+
+1 row created.
+
+
+1 row created.
+
+
+1 row created.
+
+
+1 row created.
+
+
+1 row created.
+
+
+1 row created.
+
+
+1 row created.
+
+
+1 row created.
+
+
+1 row created.
+
+
+1 row created.
+
+
+1 row created.
+
+
+1 row created.
+
+
+1 row created.
+
+
+1 row created.
+
+
+1 row created.
+
+
+1 row created.
+
+
+1 row created.
+
+
+1 row created.
+
+
+1 row created.
+
+
+1 row created.
+
+
+1 row created.
+
+
+1 row created.
+
+
+1 row created.
+
+
+1 row created.
+
+
+1 row created.
+
+
+1 row created.
+
+
+1 row created.
+
+
+1 row created.
+
+
+1 row created.
+
+
+1 row created.
+
+
+1 row created.
+
+
+1 row created.
+
+
+1 row created.
+
+
+1 row created.
+
+
+1 row created.
+
+
+1 row created.
+
+
+1 row created.
+
+
+1 row created.
+
+
+1 row created.
+
+
+1 row created.
+
+
+1 row created.
+
+
+1 row created.
+
+
+1 row created.
+
+
+1 row created.
+
+
+1 row created.
+
+
+1 row created.
+
+
+1 row created.
+
+
+1 row created.
+
+
+1 row created.
+
+
+1 row created.
+
+
+1 row created.
+
+
+1 row created.
+
+
+1 row created.
+
+
+1 row created.
+
+
+1 row created.
+
+
+1 row created.
+
+
+1 row created.
+
+
+1 row created.
+
+
+1 row created.
+
+
+1 row created.
+
+
+1 row created.
+
+
+1 row created.
+
+
+1 row created.
+
+
+1 row created.
+
+
+1 row created.
+
+
+1 row created.
+
+
+1 row created.
+
+
+1 row created.
+
+
+1 row created.
+
+
+1 row created.
+
+
+1 row created.
+
+
+1 row created.
+
+
+1 row created.
+
+
+1 row created.
+
+
+1 row created.
+
+
+1 row created.
+
+
+1 row created.
+
+
+1 row created.
+
+
+1 row created.
+
+
+1 row created.
+
+
+1 row created.
+
+
+1 row created.
+
+
+1 row created.
+
+
+1 row created.
+
+
+1 row created.
+
+
+1 row created.
+
+
+1 row created.
+
+
+1 row created.
+
+
+1 row created.
+
+
+1 row created.
+
+
+1 row created.
+
+
+1 row created.
+
+
+1 row created.
+
+
+1 row created.
+
+
+1 row created.
+
+
+1 row created.
+
+
+1 row created.
+
+
+1 row created.
+
+
+1 row created.
+
+
+1 row created.
+
+
+1 row created.
+
+
+1 row created.
+
+
+1 row created.
+
+
+1 row created.
+
+
+1 row created.
+
+
+1 row created.
+
+
+1 row created.
+
+
+1 row created.
+
+
+1 row created.
+
+
+1 row created.
+
+
+1 row created.
+
+SQL> @D:\movie-database-6.sql
+
+Function created.
+
+SQL> call movielist ('Paramount Pictures');
+The Godfather                                                                   
+The Godfather: Part II                                                          
+Forrest Gump                                                                    
+
+Call completed.
+
+SQL> call movielist ('Warner Bros. Pictures');
+Inception                                                                       
+Mystic Rivers                                                                   
+Casablanca                                                                      
+The Maltese Falcon                                                              
+
+Call completed.
+
+SQL> call movielist2 ('Paramount Pictures');
+The Godfather                                                                   
+The Godfather: Part II                                                          
+Forrest Gump                                                                    
+
+Call completed.
+
+SQL> call movielist2 ('Warner Bros. Pictures');
+Inception                                                                       
+Mystic Rivers                                                                   
+Casablanca                                                                      
+The Maltese Falcon                                                              
+
+Call completed.
+
+SQL> call movielist3 ('Paramount Pictures');
+The Godfather                                                                   
+The Godfather: Part II                                                          
+Forrest Gump                                                                    
+
+Call completed.
+
+SQL> call movielist3 ('Warner Bros. Pictures');
+Inception                                                                       
+Mystic Rivers                                                                   
+Casablanca                                                                      
+The Maltese Falcon                                                              
+
+Call completed.
+
+SQL> @D:\movielist4.sql
+ 22  .
+SQL> run
+  1  CREATE OR REPLACE PROCEDURE MovieList (
+  2      name Studio.name%TYPE) as
+  3      v_movie Movie%ROWTYPE;
+  4      c_movie NUMBER;
+  5      s_length NUMBER;
+  6  CURSOR movie_cur IS
+  7      SELECT * FROM Movie WHERE studioName = name;
+  8  BEGIN
+  9      SELECT COUNT(TITLE) INTO c_movie FROM MOVIE WHERE MOVIE.StudioName = name;
+ 10      SELECT SUM(LENGTH) INTO s_length FROM MOVIE WHERE MOVIE.Studioname = name;
+ 11      OPEN movie_cur;
+ 12      LOOP
+ 13          FETCH movie_cur INTO v_movie;
+ 14          EXIT WHEN movie_cur%NOTFOUND;
+ 15          DBMS_OUTPUT.PUT_LINE (v_movie.title);
+ 16      END LOOP;
+ 17      CLOSE movie_cur;
+ 18          DBMS_OUTPUT.PUT_LINE (name || ' produces ' || c_movie || ' with ' || s_length || ' minutes long in total.');
+ 19  END MovieList;
+ 20  
+ 21* 
+
+Procedure created.
+
+SQL> call movielist4 ('Paramount Pictures');
+The Godfather                                                                   
+The Godfather: Part II                                                          
+Forrest Gump                                                                    
+Paramount Pictures produces 3 with 517 minutes long in total.                   
+
+Call completed.
+
+SQL> @D:\maxlength.sql
+ 17  .
+SQL> run
+  1  CREATE OR REPLACE PROCEDURE MaxLength (
+  2      name Studio.name%TYPE) AS
+  3  v_movie Movie%ROWTYPE;
+  4  CURSOR movie_cur IS
+  5      SELECT * FROM MOVIE WHERE LENGTH = (SELECT MAX(LENGTH) FROM MOVIE WHERE studioName = name);
+  6  BEGIN
+  7      OPEN movie_cur;
+  8      LOOP
+  9          FETCH movie_cur INTO v_movie;
+ 10          EXIT WHEN movie_cur%NOTFOUND;
+ 11          DBMS_OUTPUT.PUT_LINE (v_movie.title);
+ 12      END LOOP;
+ 13      CLOSE movie_cur;
+ 14  END MaxLength;
+ 15  
+ 16* 
+
+Procedure created.
+
+SQL> select * from movie where studioname = 'Paramount Pictures';
+
+TITLE                                                    YEAR     LENGTH I      
+-------------------------------------------------- ---------- ---------- -      
+STUDIONAME                                                                      
+------------------------------                                                  
+The Godfather                                            1972        175 Y      
+Paramount Pictures                                                              
+                                                                                
+The Godfather: Part II                                   1974        200 Y      
+Paramount Pictures                                                              
+                                                                                
+Forrest Gump                                             1994        142 Y      
+Paramount Pictures                                                              
+                                                                             
+
+SQL> CALL MaxLength ('Paramount Pictures');
+The Godfather: Part II                                                          
+
+Call completed.
+
+SQL> @D:\starlist.sql
+ 18  .
+SQL> run
+  1  CREATE OR REPLACE PROCEDURE StarList (
+  2      name Studio.name%TYPE) AS
+  3  s_Star Starsin%ROWTYPE;
+  4  stars_sum NUMBER;
+  5  CURSOR movie_cur IS
+  6      SELECT * FROM STARSIN WHERE MOVIETITLE IN (SELECT TITLE FROM MOVIE WHERE Studioname = name);
+  7  BEGIN
+  8  SELECT COUNT(STARNAME) INTO stars_sum FROM STARSIN WHERE MOVIETITLE IN (SELECT TITLE FROM MOVIE WHERE Studioname = name);
+  9      OPEN movie_cur;
+ 10      LOOP
+ 11          FETCH movie_cur INTO s_Star;
+ 12          EXIT WHEN movie_cur%NOTFOUND;
+ 13          DBMS_OUTPUT.PUT_LINE (s_Star.starname);
+ 14      END LOOP;
+ 15      CLOSE movie_cur;
+ 16      DBMS_OUTPUT.PUT_LINE ('Total: ' || stars_sum || ' movie star(s).');
+ 17* END StarList;
+
+Procedure created.
+
+SQL> call starlist ('Paramount Pictures');
+Robert Duvall                                                                   
+Richard S. Castellano                                                           
+James Caan                                                                      
+Al Pacino                                                                       
+Marlon Brando                                                                   
+Robert De Niro                                                                  
+Diane Keaton                                                                    
+Robert Duvall                                                                   
+Al Pacino                                                                       
+Gary Sinise                                                                     
+Robin Wright                                                                    
+Tom Hanks                                                                       
+Total: 12 movie star(s).                                                        
+
+Call completed.
+
+SQL> spool off;
